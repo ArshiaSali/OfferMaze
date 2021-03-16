@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Offer Maze</string>
+    <string name="content_description">image</string>
+    <string name="login_title">LOGIN</string>
+    <string name="email_id_hint">Email ID</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password_label">Forgot Password?</string>
+    <string name="login_label">Login</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="register">Register</string>
 </resources>
