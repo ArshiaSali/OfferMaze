@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowInsets
 import android.view.WindowManager
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import sjsu.cmpe277arshia.offermaze.R
@@ -31,7 +35,7 @@ class RegisterActivity : BaseActivity() {
             startActivity(intent)
         }
         btn_register.setOnClickListener {
-            validateRegisterDetails()
+            registerUser()
         }
     }
     private fun setupActionBar() {
@@ -93,9 +97,44 @@ class RegisterActivity : BaseActivity() {
                 false
             }
             else -> {
-                showValidationError(resources.getString(R.string.successful_registration),false)
+                //showValidationError(resources.getString(R.string.successful_registration),false)
                 true
             }
+        }
+    }
+
+    private fun registerUser() {
+
+
+        if (validateRegisterDetails()) {
+
+
+            //showProgressDialog(resources.getString(R.string.please_wait))
+
+
+            val email: String = et_email.text.toString().trim { it <= ' ' }
+            val password: String = et_password.text.toString().trim { it <= ' ' }
+
+            // Create an instance and create a register a user with email and password.
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(
+                    OnCompleteListener<AuthResult> { task ->
+
+                       // hideProgressDialog()
+
+                        if (task.isSuccessful) {
+
+                            // Firebase registered user
+                            val firebaseUser: FirebaseUser = task.result!!.user!!
+
+                            showValidationError(
+                                "You are registered successfully. Your user id is ${firebaseUser.uid}",
+                                false
+                            )
+                        } else {
+                            showValidationError(task.exception!!.message.toString(), true)
+                        }
+                    })
         }
     }
 
