@@ -5,12 +5,15 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import sjsu.cmpe277arshia.offermaze.R
+import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
+import sjsu.cmpe277arshia.offermaze.models.User
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
         btn_login.setOnClickListener(this)
         tv_register.setOnClickListener(this)
+    }
+
+    fun userLoggedInSuccess(user: User) {
+
+        // Print the user details in the log as of now.
+        Log.i("First Name: ", user.firstName)
+        Log.i("Last Name: ", user.lastName)
+        Log.i("Email: ", user.email)
+
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
     }
 
     override fun onClick(view: View?) {
@@ -74,8 +88,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 .addOnCompleteListener { task ->
 
                     if (task.isSuccessful) {
-
-                        showValidationError("You are logged in successfully.", false)
+                      FireStoreClass().getUserDetails(this@LoginActivity)
                     } else {
                         showValidationError(task.exception!!.message.toString(), true)
                     }
