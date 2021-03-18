@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +14,8 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import sjsu.cmpe277arshia.offermaze.R
+import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
+import sjsu.cmpe277arshia.offermaze.models.User
 
 class RegisterActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,13 +129,17 @@ class RegisterActivity : BaseActivity() {
                             // Firebase registered user
                             val firebaseUser: FirebaseUser = task.result!!.user!!
 
-                            showValidationError(
-                                "You are registered successfully. Your user id is ${firebaseUser.uid}",
-                                false
+                            val user = User(
+                                firebaseUser.uid,
+                                et_first_name.text.toString().trim { it <= ' ' },
+                                et_last_name.text.toString().trim { it <= ' ' },
+                                et_email.text.toString().trim { it <= ' ' }
                             )
 
-                            FirebaseAuth.getInstance().signOut()
-                            finish()
+                            FireStoreClass().registerUser(this@RegisterActivity, user)
+
+                            //FirebaseAuth.getInstance().signOut()
+                            //finish()
 
                         } else {
                             showValidationError(task.exception!!.message.toString(), true)
@@ -140,6 +147,16 @@ class RegisterActivity : BaseActivity() {
                     })
         }
     }
+    fun userRegistrationSuccess() {
 
+        Toast.makeText(
+            this@RegisterActivity,
+            resources.getString(R.string.successful_registration),
+            Toast.LENGTH_SHORT
+        ).show()
+        FirebaseAuth.getInstance().signOut()
+
+        finish()
+    }
 
 }
