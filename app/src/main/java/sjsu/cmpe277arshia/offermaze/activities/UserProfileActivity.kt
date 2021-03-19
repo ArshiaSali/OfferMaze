@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_user_profile.*
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.models.User
 import sjsu.cmpe277arshia.offermaze.utils.Constants
+import sjsu.cmpe277arshia.offermaze.utils.GlideLoader
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity(),View.OnClickListener {
@@ -35,6 +37,7 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
         et_email.setText(userDetails.email)
 
         iv_user_photo.setOnClickListener(this@UserProfileActivity)
+        btn_submit.setOnClickListener(this@UserProfileActivity)
     }
 
     override fun onClick(v: View?) {
@@ -61,6 +64,13 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
                         )
                     }
                 }
+
+                R.id.btn_submit -> {
+                    if(validateUserProfileDetails()){
+                        showValidationError("valid Details",false)
+                    }
+                }
+
             }
         }
     }
@@ -92,15 +102,13 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
             if (requestCode == Constants.CHOOSE_IMAGE) {
                 if (data != null) {
                     try {
-                        // The uri of selected image from phone storage.
                         val selectedImageFileUri = data.data!!
 
-                        iv_user_photo.setImageURI(selectedImageFileUri)
-
-                  /*      GlideLoader(this@UserProfileActivity).loadUserPicture(
+                       // iv_user_photo.setImageURI(selectedImageFileUri)
+                       GlideLoader(this@UserProfileActivity).loadUserPicture(
                             selectedImageFileUri,
                             iv_user_photo
-                        )*/
+                        )
 
                     } catch (e: IOException) {
                         e.printStackTrace()
@@ -108,13 +116,25 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
                             this@UserProfileActivity,
                            "Image Selection Failed",
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
                     }
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Log.e("Request Cancelled", "Image selection cancelled")
+        }
+    }
+
+    private fun validateUserProfileDetails(): Boolean {
+        return when {
+
+            TextUtils.isEmpty(et_mobile_number.text.toString().trim { it <= ' ' }) -> {
+                showValidationError(resources.getString(R.string.err_msg_enter_mobile_number), true)
+                false
+            }
+            else -> {
+                true
+            }
         }
     }
 }
