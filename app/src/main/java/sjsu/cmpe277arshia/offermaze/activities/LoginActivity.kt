@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
 import sjsu.cmpe277arshia.offermaze.models.User
+import sjsu.cmpe277arshia.offermaze.utils.Constants
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +42,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         Log.i("Email: ", user.email)
 
         if (user.profileCompleted == 0) {
-            // If the user profile is incomplete then launch the UserProfileActivity.
+
             val intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
+            intent.putExtra(Constants.USER_DETAILS,user)
             startActivity(intent)
         } else {
-            // Redirect the user to Main Screen after log in.
+
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         }
         finish()
