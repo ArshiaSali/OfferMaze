@@ -33,4 +33,9 @@
     <string name="rb_lbl_female">FEMALE</string>
     <string name="btn_lbl_save">Save</string>
     <string name="err_msg_enter_mobile_number">Please Enter Mobile Number</string>
+    <!--<string name="title_activity_dashboard">MainActivity</string>-->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="Please_Click_Again_To_Exit"> Please click back again to exit</string>
 </resources>

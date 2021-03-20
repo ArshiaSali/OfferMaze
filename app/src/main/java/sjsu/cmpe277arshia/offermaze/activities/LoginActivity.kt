@@ -42,7 +42,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             startActivity(intent)
         } else {
 
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
         }
         finish()
     }
