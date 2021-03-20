@@ -112,7 +112,7 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
         Toast.LENGTH_LONG).show()
 
         startActivity(Intent(this@UserProfileActivity,
-            MainActivity::class.java))
+            DashboardActivity::class.java))
         finish()
     }
     override fun onRequestPermissionsResult(

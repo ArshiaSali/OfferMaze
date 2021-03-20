@@ -17,6 +17,8 @@ import sjsu.cmpe277arshia.offermaze.ui.activities.RegisterActivity
 import sjsu.cmpe277arshia.offermaze.ui.activities.UserProfileActivity
 import sjsu.cmpe277arshia.offermaze.models.User
 import sjsu.cmpe277arshia.offermaze.ui.activities.AddProductActivity
+import sjsu.cmpe277arshia.offermaze.ui.fragments.DashboardFragment
+import sjsu.cmpe277arshia.offermaze.ui.fragments.ProductsFragment
 import sjsu.cmpe277arshia.offermaze.utils.Constants
 
 
@@ -170,5 +172,41 @@ class FireStoreClass {
                 )
             }
     }
+    fun getProductsList(fragment: Fragment) {
 
+        fireStoreInstance.collection(Constants.PRODUCTS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e("Products List", document.documents.toString())
+                val productsList: ArrayList<Product> = ArrayList()
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)
+                    product!!.product_id = i.id
+                    productsList.add(product)
+                }
+                when (fragment) {
+                    is ProductsFragment -> {
+                        fragment.successProductsListFromFireStore(productsList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("Get Product List", "Error while getting product list.", e)
+            }
+    }
+    fun getDashboardItemsList(fragment: DashboardFragment){
+        fireStoreInstance.collection(Constants.PRODUCTS).get().addOnSuccessListener {
+            document -> Log.i(fragment.javaClass.simpleName, document.documents.toString())
+            val productsList: ArrayList<Product> = ArrayList()
+            for (i in document.documents) {
+                val product = i.toObject(Product::class.java)
+                product!!.product_id = i.id
+                productsList.add(product)
+            }
+            fragment.successDashboardItemsList(productsList)
+        }.addOnFailureListener{e ->
+            Log.e("Get Product List", "Error while getting dashboard list.", e)
+        }
+    }
 }
