@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.ui.activities.AddProductActivity
 
-class ProductsFragment : Fragment() {
+class ProductsFragment : BaseFragment() {
 
     //private lateinit var homeViewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +24,6 @@ class ProductsFragment : Fragment() {
     ): View? {
         //homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_products, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        textView.text = "Home"
         return root
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

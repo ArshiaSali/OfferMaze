@@ -5,15 +5,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.ui.activities.LoginActivity
 import sjsu.cmpe277arshia.offermaze.ui.activities.RegisterActivity
 import sjsu.cmpe277arshia.offermaze.ui.activities.UserProfileActivity
 import sjsu.cmpe277arshia.offermaze.models.User
+import sjsu.cmpe277arshia.offermaze.ui.activities.AddProductActivity
 import sjsu.cmpe277arshia.offermaze.utils.Constants
 
 
@@ -111,10 +114,10 @@ class FireStoreClass {
             }
     }
 
-    fun uploadImageToCloudStorage(activity: Activity, imageFileURI: Uri?) {
+    fun uploadImageToCloudStorage(activity: Activity, imageFileURI: Uri?, imageType: String) {
 
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            Constants.USER_PROFILE_IMAGE + System.currentTimeMillis() + "."
+            imageType + System.currentTimeMillis() + "."
                     + Constants.getFileExtension(
                 activity,
                 imageFileURI
@@ -136,6 +139,9 @@ class FireStoreClass {
                             is UserProfileActivity -> {
                                 activity.imageUploadSuccess(uri.toString())
                             }
+                            is AddProductActivity -> {
+                                activity.imageUploadSuccess(uri.toString())
+                            }
                         }
                     }
             }
@@ -149,4 +155,20 @@ class FireStoreClass {
                 )
             }
     }
+
+    fun uploadProductDetails(activity: AddProductActivity, productInfo: Product){
+        fireStoreInstance.collection(Constants.PRODUCTS)
+            .document()
+            .set(productInfo, SetOptions.merge()).addOnSuccessListener {
+                activity.productUploadSuccess()
+            }.addOnFailureListener{
+                e ->
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error",
+                    e
+                )
+            }
+    }
+
 }

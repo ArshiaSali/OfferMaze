@@ -2,10 +2,13 @@ package sjsu.cmpe277arshia.offermaze.ui.activities
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -15,17 +18,24 @@ import kotlinx.android.synthetic.main.activity_add_product.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import sjsu.cmpe277arshia.offermaze.R
+import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
+import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.utils.Constants
 import sjsu.cmpe277arshia.offermaze.utils.GlideLoader
 import java.io.IOException
 
 class AddProductActivity :BaseActivity(), View.OnClickListener{
+
+    private var mSelectedImageFileURI : Uri? = null
+    private var mProductImageURL:String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_product)
         //setupActionBar()
 
         iv_add_update_product.setOnClickListener(this)
+        btn_submit_add_product.setOnClickListener(this)
     }
 
     private fun setupActionBar() {
@@ -62,14 +72,49 @@ class AddProductActivity :BaseActivity(), View.OnClickListener{
                     }
                 }
 
-               /* R.id.btn_submit -> {
+                R.id.btn_submit_add_product -> {
                     if (validateProductDetails()) {
-
                         uploadProductImage()
                     }
-                }*/
+                }
             }
         }
+    }
+
+    private fun uploadProductImage(){
+        FireStoreClass().uploadImageToCloudStorage(this,mSelectedImageFileURI,Constants.PRODUCT_IMAGE)
+    }
+    fun imageUploadSuccess(imageURL: String) {
+       mProductImageURL = imageURL
+        uploadProductDetails()
+    }
+
+    fun productUploadSuccess() {
+
+        Toast.makeText(
+            this@AddProductActivity,
+            "Product Upload Success",
+            Toast.LENGTH_SHORT
+        ).show()
+        finish()
+    }
+
+    private fun uploadProductDetails(){
+        val username = this.getSharedPreferences(
+            Constants.OFFER_MAZE_PREFERENCES, Context.MODE_PRIVATE)
+            .getString(Constants.LOGGED_IN_USERNAME,"")!!
+
+        val product = Product(
+            FireStoreClass().getCurrentUserID(),
+            username,
+            et_product_title.text.toString().trim { it <= ' ' },
+            et_product_price.text.toString().trim { it <= ' ' },
+            et_product_description.text.toString().trim { it <= ' ' },
+            et_product_quantity.text.toString().trim { it <= ' ' },
+            mProductImageURL
+
+        )
+        FireStoreClass().uploadProductDetails(this,product)
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -99,10 +144,10 @@ class AddProductActivity :BaseActivity(), View.OnClickListener{
                 if (data != null) {
                iv_add_update_product.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_vector_edit))
 
-                    val selectedImageFileURI = data.data!!
+                    mSelectedImageFileURI = data.data!!
 
                     try {
-                        GlideLoader(this).loadUserPicture(selectedImageFileURI,iv_product_image)
+                        GlideLoader(this).loadUserPicture(mSelectedImageFileURI!!,iv_product_image)
                     }catch (e: IOException){
                         e.printStackTrace()
                     }
@@ -112,5 +157,46 @@ class AddProductActivity :BaseActivity(), View.OnClickListener{
             Log.e("Request Cancelled", "Image selection cancelled")
         }
     }
+
+    private fun validateProductDetails(): Boolean {
+        return when {
+
+            mSelectedImageFileURI == null -> {
+                showValidationError(resources.getString(R.string.err_msg_select_product_image), true)
+                false
+            }
+
+            TextUtils.isEmpty(et_product_title.text.toString().trim { it <= ' ' }) -> {
+                showValidationError(resources.getString(R.string.err_msg_enter_product_title), true)
+                false
+            }
+
+            TextUtils.isEmpty(et_product_price.text.toString().trim { it <= ' ' }) -> {
+                showValidationError(resources.getString(R.string.err_msg_enter_product_price), true)
+                false
+            }
+
+            TextUtils.isEmpty(et_product_description.text.toString().trim { it <= ' ' }) -> {
+                showValidationError(
+                    resources.getString(R.string.err_msg_enter_product_description),
+                    true
+                )
+                false
+            }
+
+            TextUtils.isEmpty(et_product_quantity.text.toString().trim { it <= ' ' }) -> {
+                showValidationError(
+                    resources.getString(R.string.err_msg_enter_product_quantity),
+                    true
+                )
+                false
+            }
+            else -> {
+                true
+            }
+        }
+    }
+
+
 
 }

@@ -15,4 +15,5 @@
     <color name="colorSnackBarError">#F72400</color>
     <color name="colorLightGrey">#F1F1F1</color>
     <color name="colorImageViewBackground">#E1E1E1</color>
+    <color name="offWhite">#F8F8F8</color>
 </resources>

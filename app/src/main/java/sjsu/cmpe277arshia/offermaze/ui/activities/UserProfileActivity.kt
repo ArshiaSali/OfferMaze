@@ -74,7 +74,7 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
                     if(validateUserProfileDetails()){
 
                         if(imageSelectedFileUri != null){
-                            FireStoreClass().uploadImageToCloudStorage(this,imageSelectedFileUri)
+                            FireStoreClass().uploadImageToCloudStorage(this,imageSelectedFileUri,Constants.USER_PROFILE_IMAGE)
                         }
                         else{
                             updateUserProfileDetails()
