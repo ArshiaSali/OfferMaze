@@ -1,18 +1,24 @@
 package sjsu.cmpe277arshia.offermaze.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import sjsu.cmpe277arshia.offermaze.R
+import sjsu.cmpe277arshia.offermaze.ui.activities.SettingsActivity
 
 class DashboardFragment : Fragment() {
 
     //private lateinit var dashboardViewModel: DashboardViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // If we want to use the option menu in fragment we need to add it.
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,5 +30,21 @@ class DashboardFragment : Fragment() {
         val textView: TextView = root.findViewById(R.id.text_dashboard)
         textView.text = "Dashboard Fragment"
         return root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        when (id) {
+            R.id.action_settings -> {
+                startActivity(Intent(activity, SettingsActivity::class.java))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

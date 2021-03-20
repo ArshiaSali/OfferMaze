@@ -1,9 +1,8 @@
 package sjsu.cmpe277arshia.offermaze.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import sjsu.cmpe277arshia.offermaze.R
@@ -11,6 +10,7 @@ import sjsu.cmpe277arshia.offermaze.R
 class OrdersFragment : Fragment() {
 
     //private lateinit var notificationsViewModel: NotificationsViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,4 +23,5 @@ class OrdersFragment : Fragment() {
         textView.text = "Notifications Fragment"
         return root
     }
+
 }
