@@ -1,4 +1,4 @@
-package sjsu.cmpe277arshia.offermaze.activities.ui.home
+package sjsu.cmpe277arshia.offermaze.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,19 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import sjsu.cmpe277arshia.offermaze.R
 
-class HomeFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
-    //private lateinit var homeViewModel: HomeViewModel
+    //private lateinit var dashboardViewModel: DashboardViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        textView.text = "Home"
+      //  dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val textView: TextView = root.findViewById(R.id.text_dashboard)
+        textView.text = "Dashboard Fragment"
         return root
     }
 }

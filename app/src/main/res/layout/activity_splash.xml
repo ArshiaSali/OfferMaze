@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splashscreenbg"
-    tools:context=".activities.SplashActivity">
+    tools:context=".ui.activities.SplashActivity">
 
     <sjsu.cmpe277arshia.offermaze.utils.TextViewBold
         android:id="@+id/splashView_text"

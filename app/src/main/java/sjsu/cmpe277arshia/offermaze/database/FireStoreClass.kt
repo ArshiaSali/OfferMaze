@@ -10,9 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import sjsu.cmpe277arshia.offermaze.activities.LoginActivity
-import sjsu.cmpe277arshia.offermaze.activities.RegisterActivity
-import sjsu.cmpe277arshia.offermaze.activities.UserProfileActivity
+import sjsu.cmpe277arshia.offermaze.ui.activities.LoginActivity
+import sjsu.cmpe277arshia.offermaze.ui.activities.RegisterActivity
+import sjsu.cmpe277arshia.offermaze.ui.activities.UserProfileActivity
 import sjsu.cmpe277arshia.offermaze.models.User
 import sjsu.cmpe277arshia.offermaze.utils.Constants
 

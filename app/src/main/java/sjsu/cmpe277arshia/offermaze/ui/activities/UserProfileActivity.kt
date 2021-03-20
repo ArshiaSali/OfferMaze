@@ -1,11 +1,10 @@
-package sjsu.cmpe277arshia.offermaze.activities
+package sjsu.cmpe277arshia.offermaze.ui.activities
 
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -112,7 +111,8 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
         "Updated Profile",
         Toast.LENGTH_LONG).show()
 
-        startActivity(Intent(this@UserProfileActivity,MainActivity::class.java))
+        startActivity(Intent(this@UserProfileActivity,
+            MainActivity::class.java))
         finish()
     }
     override fun onRequestPermissionsResult(

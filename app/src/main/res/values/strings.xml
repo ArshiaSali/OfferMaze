@@ -38,4 +38,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="Please_Click_Again_To_Exit"> Please click back again to exit</string>
+    <string name="title_products">Products</string>
+    <string name="title_orders">Orders</string>
 </resources>

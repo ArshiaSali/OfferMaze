@@ -1,4 +1,4 @@
-package sjsu.cmpe277arshia.offermaze.activities
+package sjsu.cmpe277arshia.offermaze.ui.activities
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
