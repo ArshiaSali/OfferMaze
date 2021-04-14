@@ -12,11 +12,8 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import sjsu.cmpe277arshia.offermaze.models.Product
-import sjsu.cmpe277arshia.offermaze.ui.activities.LoginActivity
-import sjsu.cmpe277arshia.offermaze.ui.activities.RegisterActivity
-import sjsu.cmpe277arshia.offermaze.ui.activities.UserProfileActivity
 import sjsu.cmpe277arshia.offermaze.models.User
-import sjsu.cmpe277arshia.offermaze.ui.activities.AddProductActivity
+import sjsu.cmpe277arshia.offermaze.ui.activities.*
 import sjsu.cmpe277arshia.offermaze.ui.fragments.DashboardFragment
 import sjsu.cmpe277arshia.offermaze.ui.fragments.ProductsFragment
 import sjsu.cmpe277arshia.offermaze.utils.Constants
@@ -83,6 +80,9 @@ class FireStoreClass {
                 when (activity) {
                     is LoginActivity -> {
                         activity.userLoggedInSuccess(user)
+                    }
+                    is SettingsActivity -> {
+                        activity.userDetailsSuccess(user)
                     }
                 }
             }
