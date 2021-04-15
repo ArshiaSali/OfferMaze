@@ -1,6 +1,7 @@
 package sjsu.cmpe277arshia.offermaze.ui.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_list_layout.view.*
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.models.Product
+import sjsu.cmpe277arshia.offermaze.ui.activities.ProductDetailsActivity
 import sjsu.cmpe277arshia.offermaze.ui.fragments.ProductsFragment
+import sjsu.cmpe277arshia.offermaze.utils.Constants
 import sjsu.cmpe277arshia.offermaze.utils.GlideLoader
 
 open class MyProductsListAdapter(
@@ -40,9 +43,13 @@ open class MyProductsListAdapter(
             holder.itemView.tv_item_price.text = "$${model.price}"
 
             holder.itemView.ib_delete_product.setOnClickListener {
-
                 fragment.deleteProductID(model.product_id)
+            }
 
+            holder.itemView.setOnClickListener{
+                var intent = Intent(context, ProductDetailsActivity::class.java)
+                intent.putExtra(Constants.EXTRA_PRODUCT_ID, model.product_id)
+                context.startActivity(intent)
             }
 
         }
