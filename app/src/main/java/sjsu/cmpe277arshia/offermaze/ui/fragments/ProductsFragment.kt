@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products.*
@@ -13,6 +14,7 @@ import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
 import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.ui.activities.AddProductActivity
 import sjsu.cmpe277arshia.offermaze.ui.adapters.MyProductsListAdapter
+import androidx.appcompat.app.AlertDialog
 
 class ProductsFragment : BaseFragment() {
 
@@ -22,6 +24,49 @@ class ProductsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
+    fun deleteProductID(productID: String){
+      showAlertDialogToDeleteProduct(productID)
+    }
+
+    private fun showAlertDialogToDeleteProduct(productID: String) {
+
+        val builder = AlertDialog.Builder(requireActivity())
+        //set title for alert dialog
+        builder.setTitle(resources.getString(R.string.delete_dialog_title))
+        //set message for alert dialog
+        builder.setMessage(resources.getString(R.string.delete_dialog_message))
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton(resources.getString(R.string.yes)) { dialogInterface, _ ->
+
+            FireStoreClass().deleteProduct(this@ProductsFragment, productID)
+
+            dialogInterface.dismiss()
+        }
+
+        //performing negative action
+        builder.setNegativeButton(resources.getString(R.string.no)) { dialogInterface, _ ->
+
+            dialogInterface.dismiss()
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    fun productDeleteSuccess(){
+        Toast.makeText(
+            requireActivity(),
+            resources.getString(R.string.product_delete_success_message),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        getProductListFromFireStore()
+
+    }
     fun successProductsListFromFireStore(productsList: ArrayList<Product>) {
        if(productsList.size > 0){
            rv_my_product_items.visibility = View.VISIBLE

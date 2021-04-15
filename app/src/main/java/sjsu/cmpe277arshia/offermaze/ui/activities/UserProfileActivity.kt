@@ -33,12 +33,36 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
         if(intent.hasExtra(Constants.USER_DETAILS)){
             globalUserDetails = intent.getParcelableExtra(Constants.USER_DETAILS)!!
         }
-        et_first_name.isEnabled = false
+
         et_first_name.setText(globalUserDetails.firstName)
-        et_last_name.isEnabled = false
         et_last_name.setText(globalUserDetails.lastName)
         et_email.isEnabled = false
         et_email.setText(globalUserDetails.email)
+
+        if(globalUserDetails.profileCompleted == 0){
+            tv_title.text = resources.getString(R.string.title_complete_profile)
+            et_first_name.isEnabled = false
+            et_last_name.isEnabled = false
+
+        }else{
+            // Call the setup action bar function.
+            //setupActionBar()
+
+            // Update the title of the screen to edit profile.
+            tv_title.text = resources.getString(R.string.title_edit_profile)
+
+            // Load the image using the GlideLoader class with the use of Glide Library.
+            GlideLoader(this@UserProfileActivity).loadUserPicture(globalUserDetails.image, iv_user_photo)
+
+            if (globalUserDetails.mobile != 0L) {
+                et_mobile_number.setText(globalUserDetails.mobile.toString())
+            }
+            if (globalUserDetails.gender == Constants.MALE) {
+                rb_male.isChecked = true
+            } else {
+                rb_female.isChecked = true
+            }
+        }
 
         iv_user_photo.setOnClickListener(this@UserProfileActivity)
         btn_submit.setOnClickListener(this@UserProfileActivity)
@@ -86,6 +110,22 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
     }
     private fun updateUserProfileDetails(){
         val userHashMap = HashMap<String, Any>()
+
+        // Get the FirstName from editText and trim the space
+        val firstName = et_first_name.text.toString().trim { it <= ' ' }
+        if (firstName != globalUserDetails.firstName) {
+            userHashMap[Constants.FIRST_NAME] = firstName
+        }
+
+        // Get the LastName from editText and trim the space
+        val lastName = et_last_name.text.toString().trim { it <= ' ' }
+        if (lastName != globalUserDetails.lastName) {
+            userHashMap[Constants.LAST_NAME] = lastName
+        }
+
+
+
+
         val mobileNumber = et_mobile_number.text.toString().trim { it <= ' ' }
         val gender = if(rb_male.isChecked){
             Constants.MALE
@@ -95,10 +135,15 @@ class UserProfileActivity : BaseActivity(),View.OnClickListener {
         if(userProfileImageURL.isNotEmpty()){
             userHashMap[Constants.IMAGE] = userProfileImageURL
         }
-        if (mobileNumber.isNotEmpty()){
+        if (mobileNumber.isNotEmpty() && mobileNumber != globalUserDetails.mobile.toString()){
             userHashMap[Constants.MOBILE] = mobileNumber.toLong()
         }
-        userHashMap[Constants.GENDER] = gender
+
+        if (gender.isNotEmpty() && gender != globalUserDetails.gender.toString()){
+            userHashMap[Constants.GENDER] = gender
+        }
+
+        //userHashMap[Constants.GENDER] = gender
 
         userHashMap[Constants.COMPLETE_PROFILE] = 1
 

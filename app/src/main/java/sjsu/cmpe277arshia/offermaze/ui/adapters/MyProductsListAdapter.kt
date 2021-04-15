@@ -39,12 +39,11 @@ open class MyProductsListAdapter(
             holder.itemView.tv_item_name.text = model.title
             holder.itemView.tv_item_price.text = "$${model.price}"
 
-            /*holder.itemView.ib_delete_product.setOnClickListener {
+            holder.itemView.ib_delete_product.setOnClickListener {
 
+                fragment.deleteProductID(model.product_id)
 
-                fragment.deleteProduct(model.product_id)
-
-            }*/
+            }
 
         }
     }

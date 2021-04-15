@@ -195,6 +195,18 @@ class FireStoreClass {
                 Log.e("Get Product List", "Error while getting product list.", e)
             }
     }
+
+    fun deleteProduct(fragment: ProductsFragment,productId: String){
+        fireStoreInstance.collection(Constants.PRODUCTS)
+            .document(productId)
+            .delete()
+            .addOnSuccessListener {
+                fragment.productDeleteSuccess()
+            }
+            .addOnFailureListener{e ->
+                Log.e("Delete Product", "Error while deleting product", e)
+            }
+    }
     fun getDashboardItemsList(fragment: DashboardFragment){
         fireStoreInstance.collection(Constants.PRODUCTS).get().addOnSuccessListener {
             document -> Log.i(fragment.javaClass.simpleName, document.documents.toString())
