@@ -207,6 +207,26 @@ class FireStoreClass {
                 Log.e("Delete Product", "Error while deleting product", e)
             }
     }
+
+    fun getProductDetails(activity: ProductDetailsActivity, productId: String) {
+
+        fireStoreInstance.collection(Constants.PRODUCTS)
+            .document(productId)
+            .get()
+            .addOnSuccessListener { document ->
+
+                Log.e(activity.javaClass.simpleName, document.toString())
+
+                val product = document.toObject(Product::class.java)!!
+
+                activity.productDetailsSuccess(product)
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(activity.javaClass.simpleName, "Error while getting the product details.", e)
+            }
+    }
+
     fun getDashboardItemsList(fragment: DashboardFragment){
         fireStoreInstance.collection(Constants.PRODUCTS).get().addOnSuccessListener {
             document -> Log.i(fragment.javaClass.simpleName, document.documents.toString())

@@ -6,7 +6,10 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_product_details.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import sjsu.cmpe277arshia.offermaze.R
+import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
+import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.utils.Constants
+import sjsu.cmpe277arshia.offermaze.utils.GlideLoader
 
 class ProductDetailsActivity : BaseActivity() {
 
@@ -20,6 +23,26 @@ class ProductDetailsActivity : BaseActivity() {
             globalProductId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
             Log.i("Product_id",globalProductId)
         }
+        getProductDetails()
+    }
+
+    private fun getProductDetails() {
+
+        FireStoreClass().getProductDetails(this@ProductDetailsActivity, globalProductId)
+    }
+
+    fun productDetailsSuccess(product: Product){
+
+        // Populate the product details in the UI.
+        GlideLoader(this@ProductDetailsActivity).loadProductPicture(
+            product.image,
+            iv_product_detail_image
+        )
+
+        tv_product_details_title.text = product.title
+        tv_product_details_price.text = "$${product.price}"
+        tv_product_details_description.text = product.description
+        tv_product_details_stock_quantity.text = product.stock_quantity
     }
 
     private fun setupActionBar() {
