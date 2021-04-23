@@ -3,6 +3,7 @@ package sjsu.cmpe277arshia.offermaze.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_product_details.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import sjsu.cmpe277arshia.offermaze.R
@@ -21,7 +22,18 @@ class ProductDetailsActivity : BaseActivity() {
         Log.i("Products_id",globalProductId)
         if(intent.hasExtra(Constants.EXTRA_PRODUCT_ID)){
             globalProductId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
-            Log.i("Product_id",globalProductId)
+        }
+
+        var productOwnerId : String = ""
+
+        if(intent.hasExtra(Constants.EXTRA_PRODUCT_OWNER_ID)){
+            productOwnerId = intent.getStringExtra(Constants.EXTRA_PRODUCT_OWNER_ID)!!
+        }
+
+        if(FireStoreClass().getCurrentUserID() == productOwnerId){
+            btn_add_to_cart.visibility = View.GONE
+        }else{
+            btn_add_to_cart.visibility = View.VISIBLE
         }
         getProductDetails()
     }
