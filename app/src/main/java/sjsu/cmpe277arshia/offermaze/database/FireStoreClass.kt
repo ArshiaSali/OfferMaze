@@ -264,4 +264,35 @@ class FireStoreClass {
                 )
             }
     }
+
+    /**
+     * A function to check whether the item already exist in the cart or not.
+     */
+    fun checkIfItemExistInCart(activity: ProductDetailsActivity, productId: String) {
+
+        fireStoreInstance.collection(Constants.CART_ITEMS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .whereEqualTo(Constants.PRODUCT_ID, productId)
+            .get()
+            .addOnSuccessListener { document ->
+
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+
+                // If the document size is greater than 1 it means the product is already added to the cart.
+                if (document.documents.size > 0) {
+                    activity.productExistsInCart()
+                } else {
+                }
+
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while checking the existing cart list.",
+                    e
+                )
+            }
+    }
+    // END
 }

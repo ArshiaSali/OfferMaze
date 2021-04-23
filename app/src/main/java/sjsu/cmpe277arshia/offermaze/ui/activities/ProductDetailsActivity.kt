@@ -36,12 +36,14 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
 
         if(FireStoreClass().getCurrentUserID() == productOwnerId){
             btn_add_to_cart.visibility = View.GONE
+            btn_go_to_cart.visibility = View.GONE
         }else{
             btn_add_to_cart.visibility = View.VISIBLE
         }
         getProductDetails()
 
         btn_add_to_cart.setOnClickListener(this)
+        btn_go_to_cart.setOnClickListener(this)
     }
 
     private fun getProductDetails() {
@@ -61,6 +63,22 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
         tv_product_details_price.text = "$${product.price}"
         tv_product_details_description.text = product.description
         tv_product_details_stock_quantity.text = product.stock_quantity
+
+        // There is no need to check the cart list if the product owner himself is seeing the product details.
+        if (FireStoreClass().getCurrentUserID() == product.user_id) {
+
+        } else {
+            FireStoreClass().checkIfItemExistInCart(this@ProductDetailsActivity, globalProductId)
+        }
+
+    }
+
+    fun productExistsInCart() {
+
+        // Hide the AddToCart button if the item is already in the cart.
+        btn_add_to_cart.visibility = View.GONE
+        // Show the GoToCart button if the item is already in the cart. User can update the quantity from the cart list screen if he wants.
+        btn_go_to_cart.visibility = View.VISIBLE
     }
 
     fun addToCartSuccess() {
@@ -69,6 +87,11 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
             resources.getString(R.string.success_message_item_added_to_cart),
             Toast.LENGTH_SHORT
         ).show()
+
+        // Hide the AddToCart button if the item is already in the cart.
+        btn_add_to_cart.visibility = View.GONE
+        // Show the GoToCart button if the item is already in the cart. User can update the quantity from the cart list screen if he wants.
+        btn_go_to_cart.visibility = View.VISIBLE
 
     }
 
