@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import sjsu.cmpe277arshia.offermaze.models.CartItem
 import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.models.User
 import sjsu.cmpe277arshia.offermaze.ui.activities.*
@@ -240,5 +241,27 @@ class FireStoreClass {
         }.addOnFailureListener{e ->
             Log.e("Get Product List", "Error while getting dashboard list.", e)
         }
+    }
+
+
+    fun addCartItems(activity: ProductDetailsActivity, addToCart: CartItem) {
+
+        fireStoreInstance.collection(Constants.CART_ITEMS)
+            .document()
+            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
+            .set(addToCart, SetOptions.merge())
+            .addOnSuccessListener {
+
+                // Here call a function of base activity for transferring the result to it.
+                activity.addToCartSuccess()
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating the document for cart item.",
+                    e
+                )
+            }
     }
 }
