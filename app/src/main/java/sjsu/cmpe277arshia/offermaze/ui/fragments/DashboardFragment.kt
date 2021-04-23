@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
 import sjsu.cmpe277arshia.offermaze.models.Product
+import sjsu.cmpe277arshia.offermaze.ui.activities.CartListActivity
 import sjsu.cmpe277arshia.offermaze.ui.activities.ProductDetailsActivity
 import sjsu.cmpe277arshia.offermaze.ui.activities.SettingsActivity
 import sjsu.cmpe277arshia.offermaze.ui.adapters.DashboardItemsListAdapter
@@ -53,6 +54,11 @@ class DashboardFragment : BaseFragment() {
         when (id) {
             R.id.action_settings -> {
                 startActivity(Intent(activity, SettingsActivity::class.java))
+                return true
+            }
+
+            R.id.action_cart -> {
+                startActivity(Intent(activity, CartListActivity::class.java))
                 return true
             }
         }

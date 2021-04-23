@@ -1,5 +1,6 @@
 package sjsu.cmpe277arshia.offermaze.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -125,6 +126,9 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
             when(v.id){
                 R.id.btn_add_to_cart -> {
                     addToCart()
+                }
+                R.id.btn_go_to_cart -> {
+                    startActivity(Intent(this@ProductDetailsActivity, CartListActivity::class.java))
                 }
             }
         }
