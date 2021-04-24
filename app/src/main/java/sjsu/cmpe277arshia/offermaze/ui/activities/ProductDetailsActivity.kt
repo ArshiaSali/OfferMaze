@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_product_details.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import sjsu.cmpe277arshia.offermaze.R
@@ -65,12 +66,23 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
         tv_product_details_description.text = product.description
         tv_product_details_stock_quantity.text = product.stock_quantity
 
-        // There is no need to check the cart list if the product owner himself is seeing the product details.
-        if (FireStoreClass().getCurrentUserID() == product.user_id) {
-
-        } else {
-            FireStoreClass().checkIfItemExistInCart(this@ProductDetailsActivity, globalProductId)
+        if(product.stock_quantity.toInt() == 0){
+            btn_add_to_cart.visibility = View.GONE
+            tv_product_details_stock_quantity.text = resources.getString(R.string.lbl_out_of_stock)
+            tv_product_details_stock_quantity.setTextColor(ContextCompat.getColor(this@ProductDetailsActivity, R.color.colorSnackBarError))
         }
+
+        else{
+
+            // There is no need to check the cart list if the product owner himself is seeing the product details.
+            if (FireStoreClass().getCurrentUserID() == product.user_id) {
+
+            } else {
+                FireStoreClass().checkIfItemExistInCart(this@ProductDetailsActivity, globalProductId)
+            }
+
+        }
+
 
     }
 

@@ -4,15 +4,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_cart_list.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
 import sjsu.cmpe277arshia.offermaze.models.CartItem
+import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.ui.adapters.CartItemsListAdapter
 
 class CartListActivity : BaseActivity() {
+
+    private lateinit var globalProductsList : ArrayList<Product>
+    private lateinit var globalCartListItems: ArrayList<CartItem>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart_list)
@@ -39,11 +45,34 @@ class CartListActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        //getCartItemsList()
+        getProductList()
+    }
+
+    fun itemRemovedSuccess(){
+        Toast.makeText(this@CartListActivity, resources.getString(R.string.msg_item_removed_successfully),
+        Toast.LENGTH_SHORT).show()
+
         getCartItemsList()
     }
     fun successCartItemsList(cartList: ArrayList<CartItem>) {
 
-       if(cartList.size > 0){
+        for (product in globalProductsList) {
+            for (cartItem in cartList) {
+                if (product.product_id == cartItem.product_id) {
+
+                    cartItem.stock_quantity = product.stock_quantity
+
+                    if (product.stock_quantity.toInt() == 0) {
+                        cartItem.cart_quantity = product.stock_quantity
+                    }
+                }
+            }
+        }
+
+        globalCartListItems = cartList
+
+       if(globalCartListItems.size > 0){
            rv_cart_items_list.visibility = View.VISIBLE
            ll_checkout.visibility = View.VISIBLE
            tv_no_cart_item_found.visibility = View.GONE
@@ -54,10 +83,13 @@ class CartListActivity : BaseActivity() {
            rv_cart_items_list.adapter = cartListAdapter
            var subTotal: Double = 0.0
 
-           for(item in cartList){
-               val price = item.price.toDouble()
-               val quantity = item.cart_quantity.toInt()
-               subTotal += (price * quantity)
+           for(item in globalCartListItems){
+               val availableQuantity = item.stock_quantity.toInt()
+               if(availableQuantity > 0) {
+                   val price = item.price.toDouble()
+                   val quantity = item.cart_quantity.toInt()
+                   subTotal += (price * quantity)
+               }
            }
            tv_sub_total.text = "$$subTotal"
            tv_shipping_charge.text = "$5.0"
@@ -76,4 +108,21 @@ class CartListActivity : BaseActivity() {
            tv_no_cart_item_found.visibility = View.VISIBLE
        }
     }
+
+    fun successProductsListFromFireStore(productsList: ArrayList<Product>) {
+
+        globalProductsList = productsList
+        getCartItemsList()
+
+    }
+
+    private fun getProductList() {
+
+        FireStoreClass().getAllProductsList(this)
+    }
+
+    fun itemUpdateSuccess() {
+        getCartItemsList()
+    }
+
 }

@@ -228,6 +228,57 @@ class FireStoreClass {
             }
     }
 
+    fun removeItemFromCart(context: Context, cart_id: String) {
+
+        fireStoreInstance.collection(Constants.CART_ITEMS)
+            .document(cart_id)
+            .delete()
+            .addOnSuccessListener {
+                when (context) {
+                    is CartListActivity -> {
+                        context.itemRemovedSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    context.javaClass.simpleName,
+                    "Error while removing the item from the cart list.",
+                    e
+                )
+            }
+    }
+
+    fun getAllProductsList(activity: CartListActivity) {
+        // The collection name for PRODUCTS
+        fireStoreInstance.collection(Constants.PRODUCTS)
+            .get() // Will get the documents snapshots.
+            .addOnSuccessListener { document ->
+
+                // Here we get the list of boards in the form of documents.
+                Log.e("Products List", document.documents.toString())
+
+                // Here we have created a new instance for Products ArrayList.
+                val productsList: ArrayList<Product> = ArrayList()
+
+                // A for loop as per the list of documents to convert them into Products ArrayList.
+                for (i in document.documents) {
+
+                    val product = i.toObject(Product::class.java)
+                    product!!.product_id = i.id
+
+                    productsList.add(product)
+                }
+
+                activity.successProductsListFromFireStore(productsList)
+
+            }
+            .addOnFailureListener { e ->
+                Log.e("Get Product List", "Error while getting all product list.", e)
+            }
+    }
+
     fun getDashboardItemsList(fragment: DashboardFragment){
         fireStoreInstance.collection(Constants.PRODUCTS).get().addOnSuccessListener {
             document -> Log.i(fragment.javaClass.simpleName, document.documents.toString())
@@ -333,5 +384,28 @@ class FireStoreClass {
                 )
             }
     }
-    // END
+
+    fun updateMyCart(context: Context, cart_id: String, itemHashMap: HashMap<String, Any>) {
+
+        fireStoreInstance.collection(Constants.CART_ITEMS)
+            .document(cart_id) // cart id
+            .update(itemHashMap) // A HashMap of fields which are to be updated.
+            .addOnSuccessListener {
+
+                when (context) {
+                    is CartListActivity -> {
+                        context.itemUpdateSuccess()
+                    }
+                }
+
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    context.javaClass.simpleName,
+                    "Error while updating the cart item.",
+                    e
+                )
+            }
+    }
 }
