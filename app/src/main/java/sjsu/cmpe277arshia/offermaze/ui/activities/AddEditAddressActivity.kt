@@ -1,5 +1,6 @@
 package sjsu.cmpe277arshia.offermaze.ui.activities
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -77,6 +78,7 @@ class AddEditAddressActivity : BaseActivity() {
             Toast.LENGTH_SHORT
         ).show()
 
+        setResult(RESULT_OK)
         finish()
     }
 

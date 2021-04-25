@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OfferMaze">
+        <activity android:name=".ui.activities.CheckoutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoActionBar"></activity>
         <activity
             android:name=".ui.activities.AddEditAddressActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.NoActionBar"/>
+            android:theme="@style/Theme.NoActionBar" />
         <activity
             android:name=".ui.activities.AddressListActivity"
             android:screenOrientation="portrait"

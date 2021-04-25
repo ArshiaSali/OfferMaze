@@ -2,17 +2,22 @@ package sjsu.cmpe277arshia.offermaze.ui.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_address_layout.view.*
 import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.models.Address
+import sjsu.cmpe277arshia.offermaze.ui.activities.CheckoutActivity
+import sjsu.cmpe277arshia.offermaze.utils.Constants
 
 open class AddressListAdapter(
     private val context: Context,
-    private var list: ArrayList<Address>
+    private var list: ArrayList<Address>,
+    private val selectAddress: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -37,6 +42,14 @@ open class AddressListAdapter(
             holder.itemView.tv_address_type.text = model.type
             holder.itemView.tv_address_details.text = "${model.address}, ${model.zipCode}"
             holder.itemView.tv_address_mobile_number.text = model.mobileNumber
+
+            if(selectAddress){
+                holder.itemView.setOnClickListener {
+                   val intent = Intent(context,CheckoutActivity::class.java)
+                    intent.putExtra(Constants.EXTRA_SELECTED_ADDRESS,model)
+                    context.startActivity(intent)
+                }
+            }
         }
     }
 

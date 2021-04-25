@@ -35,14 +35,16 @@ object Constants {
     const val HOME: String = "Home"
     const val OFFICE: String = "Office"
     const val ADDRESSES: String = "addresses"
+    const val EXTRA_ADDRESS_DETAILS: String = "AddressDetails"
+    const val EXTRA_SELECT_ADDRESS: String = "extra_select_address"
+    const val ADD_ADDRESS_REQUEST_CODE: Int = 121
+    const val EXTRA_SELECTED_ADDRESS: String = "extra_selected_address"
 
     fun showImageChooser(activity: Activity) {
-        // An intent for launching the image selection of phone storage.
         val galleryIntent = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
-        // Launches the image selection of phone storage using the constant code.
         activity.startActivityForResult(galleryIntent, CHOOSE_IMAGE)
     }
     fun getFileExtension(activity: Activity, uri: Uri?): String? {

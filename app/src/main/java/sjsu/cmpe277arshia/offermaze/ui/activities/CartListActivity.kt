@@ -1,5 +1,6 @@
 package sjsu.cmpe277arshia.offermaze.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
 import sjsu.cmpe277arshia.offermaze.models.CartItem
 import sjsu.cmpe277arshia.offermaze.models.Product
 import sjsu.cmpe277arshia.offermaze.ui.adapters.CartItemsListAdapter
+import sjsu.cmpe277arshia.offermaze.utils.Constants
 
 class CartListActivity : BaseActivity() {
 
@@ -23,6 +25,12 @@ class CartListActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart_list)
         setupActionBar()
+
+        btn_checkout.setOnClickListener {
+            val intent = Intent(this@CartListActivity, AddressListActivity::class.java)
+            intent.putExtra(Constants.EXTRA_SELECT_ADDRESS, true)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar() {
