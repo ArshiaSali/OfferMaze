@@ -253,7 +253,7 @@ class FireStoreClass {
             }
     }
 
-    fun getAllProductsList(activity: CartListActivity) {
+    fun getAllProductsList(activity: Activity) {
         // The collection name for PRODUCTS
         fireStoreInstance.collection(Constants.PRODUCTS)
             .get() // Will get the documents snapshots.
@@ -274,7 +274,14 @@ class FireStoreClass {
                     productsList.add(product)
                 }
 
-                activity.successProductsListFromFireStore(productsList)
+                when(activity){
+                    is CartListActivity -> {
+                        activity.successProductsListFromFireStore(productsList)
+                    }
+                    is CheckoutActivity -> {
+                        activity.successProductsListFromFireStore(productsList)
+                    }
+                }
 
             }
             .addOnFailureListener { e ->
@@ -420,6 +427,9 @@ class FireStoreClass {
 
                 when (activity) {
                     is CartListActivity -> {
+                        activity.successCartItemsList(list)
+                    }
+                    is CheckoutActivity -> {
                         activity.successCartItemsList(list)
                     }
                 }
