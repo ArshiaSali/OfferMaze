@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_address_list.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import sjsu.cmpe277arshia.offermaze.R
 
-class AddressListActivity : AppCompatActivity() {
+class AddressListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address_list)

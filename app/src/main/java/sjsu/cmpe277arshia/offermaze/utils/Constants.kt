@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 
 object Constants {
+
     const val READ_STORAGE_PERMISSION_CODE = 2
     const val USERS: String = "users"
     const val OFFER_MAZE_PREFERENCES: String = "OfferMazePref"
@@ -31,6 +32,9 @@ object Constants {
     const val CART_ITEMS : String = "cart_items"
     const val PRODUCT_ID : String = "product_id"
     const val CART_QUANTITY: String = "cart_quantity"
+    const val HOME: String = "Home"
+    const val OFFICE: String = "Office"
+    const val ADDRESSES: String = "addresses"
 
     fun showImageChooser(activity: Activity) {
         // An intent for launching the image selection of phone storage.
