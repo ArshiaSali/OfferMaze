@@ -294,6 +294,37 @@ class FireStoreClass {
             Log.e("Get Product List", "Error while getting dashboard list.", e)
         }
     }
+    fun getAddressesList(activity: AddressListActivity) {
+        // The collection name for PRODUCTS
+        fireStoreInstance.collection(Constants.ADDRESSES)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get() // Will get the documents snapshots.
+            .addOnSuccessListener { document ->
+                // Here we get the list of boards in the form of documents.
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                // Here we have created a new instance for address ArrayList.
+                val addressList: ArrayList<Address> = ArrayList()
+
+                // A for loop as per the list of documents to convert them into Boards ArrayList.
+                for (i in document.documents) {
+
+                    val address = i.toObject(Address::class.java)!!
+                    address.id = i.id
+
+                    addressList.add(address)
+                }
+
+                activity.successAddressListFromFireStore(addressList)
+
+            }
+            .addOnFailureListener { e ->
+
+
+                Log.e(activity.javaClass.simpleName, "Error while getting the address list.", e)
+            }
+
+    }
+
     fun addAddress(activity: AddEditAddressActivity, addressInfo: Address) {
 
         // Collection name address.

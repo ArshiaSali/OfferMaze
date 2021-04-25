@@ -3,9 +3,12 @@ package sjsu.cmpe277arshia.offermaze.ui.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_address_list.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import sjsu.cmpe277arshia.offermaze.R
+import sjsu.cmpe277arshia.offermaze.database.FireStoreClass
+import sjsu.cmpe277arshia.offermaze.models.Address
 
 class AddressListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,8 +20,20 @@ class AddressListActivity : BaseActivity() {
             val intent = Intent(this@AddressListActivity, AddEditAddressActivity::class.java)
             startActivity(intent)
         }
+        getAddressList()
     }
 
+    fun successAddressListFromFireStore(addressList: ArrayList<Address>) {
+
+        for (i in addressList) {
+
+            Log.i("Name and Address", "${i.name} ::  ${i.address}")
+        }
+    }
+    private fun getAddressList() {
+
+        FireStoreClass().getAddressesList(this@AddressListActivity)
+    }
     private fun setupActionBar() {
 
         setSupportActionBar(toolbar_address_list_activity)
