@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.models.Address
 import sjsu.cmpe277arshia.offermaze.models.CartItem
 import sjsu.cmpe277arshia.offermaze.models.Product
@@ -294,6 +296,28 @@ class FireStoreClass {
             Log.e("Get Product List", "Error while getting dashboard list.", e)
         }
     }
+
+    fun deleteAddress(activity: AddressListActivity, addressId: String) {
+
+        fireStoreInstance.collection(Constants.ADDRESSES)
+            .document(addressId)
+            .delete()
+            .addOnSuccessListener {
+
+                activity.deleteAddressSuccess()
+
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while deleting the address.",
+                    e
+                )
+            }
+    }
+
+
     fun getAddressesList(activity: AddressListActivity) {
         // The collection name for PRODUCTS
         fireStoreInstance.collection(Constants.ADDRESSES)
