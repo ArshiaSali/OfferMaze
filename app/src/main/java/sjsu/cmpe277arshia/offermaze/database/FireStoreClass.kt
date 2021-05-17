@@ -16,6 +16,7 @@ import sjsu.cmpe277arshia.offermaze.R
 import sjsu.cmpe277arshia.offermaze.models.*
 import sjsu.cmpe277arshia.offermaze.ui.activities.*
 import sjsu.cmpe277arshia.offermaze.ui.fragments.DashboardFragment
+import sjsu.cmpe277arshia.offermaze.ui.fragments.OrdersFragment
 import sjsu.cmpe277arshia.offermaze.ui.fragments.ProductsFragment
 import sjsu.cmpe277arshia.offermaze.utils.Constants
 
@@ -192,6 +193,31 @@ class FireStoreClass {
 
             Log.e(activity.javaClass.simpleName, "Error while updating all the details after order placed.", e)
         }
+    }
+
+    fun getMyOrdersList(fragment: OrdersFragment) {
+        fireStoreInstance.collection(Constants.ORDERS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get() // Will get the documents snapshots.
+            .addOnSuccessListener { document ->
+                Log.e(fragment.javaClass.simpleName, document.documents.toString())
+                val list: ArrayList<Order> = ArrayList()
+
+                for (i in document.documents) {
+
+                    val orderItem = i.toObject(Order::class.java)!!
+                    orderItem.id = i.id
+
+                    list.add(orderItem)
+                }
+
+                fragment.populateOrdersListInUI(list)
+
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(fragment.javaClass.simpleName, "Error while getting the orders list.", e)
+            }
     }
 
     fun placeOrder(activity: CheckoutActivity, order: Order) {
