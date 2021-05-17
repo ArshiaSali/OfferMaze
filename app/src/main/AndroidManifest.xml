@@ -3,7 +3,7 @@
     package="sjsu.cmpe277arshia.offermaze">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -65,6 +65,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:screenOrientation="portrait" />
+        <meta-data android:name="com.razorpay.ApiKey" android:value="@string/key_id" />
     </application>
 
 </manifest>

@@ -13,10 +13,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import sjsu.cmpe277arshia.offermaze.R
-import sjsu.cmpe277arshia.offermaze.models.Address
-import sjsu.cmpe277arshia.offermaze.models.CartItem
-import sjsu.cmpe277arshia.offermaze.models.Product
-import sjsu.cmpe277arshia.offermaze.models.User
+import sjsu.cmpe277arshia.offermaze.models.*
 import sjsu.cmpe277arshia.offermaze.ui.activities.*
 import sjsu.cmpe277arshia.offermaze.ui.fragments.DashboardFragment
 import sjsu.cmpe277arshia.offermaze.ui.fragments.ProductsFragment
@@ -158,6 +155,61 @@ class FireStoreClass {
                     activity.javaClass.simpleName,
                     exception.message,
                     exception
+                )
+            }
+    }
+
+    fun updateAllDetails(activity: CheckoutActivity, cartList: ArrayList<CartItem>) {
+
+        val writeBatch = fireStoreInstance.batch()
+
+        for (cart in cartList) {
+
+            val productHashMap = HashMap<String, Any>()
+
+            productHashMap[Constants.STOCK_QUANTITY] =
+                (cart.stock_quantity.toInt() - cart.cart_quantity.toInt()).toString()
+
+            val documentReference = fireStoreInstance.collection(Constants.PRODUCTS)
+                .document(cart.product_id)
+
+            writeBatch.update(documentReference, productHashMap)
+        }
+
+        // Delete the list of cart items
+        for (cart in cartList) {
+
+            val documentReference = fireStoreInstance.collection(Constants.CART_ITEMS)
+                .document(cart.id)
+            writeBatch.delete(documentReference)
+        }
+
+        writeBatch.commit().addOnSuccessListener {
+
+            activity.allDetailsUpdatedSuccessfully()
+
+        }.addOnFailureListener { e ->
+
+            Log.e(activity.javaClass.simpleName, "Error while updating all the details after order placed.", e)
+        }
+    }
+
+    fun placeOrder(activity: CheckoutActivity, order: Order) {
+
+        fireStoreInstance.collection(Constants.ORDERS)
+            .document()
+            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
+            .set(order, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.orderPlacedSuccess()
+
+            }
+            .addOnFailureListener { e ->
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while placing an order.",
+                    e
                 )
             }
     }
