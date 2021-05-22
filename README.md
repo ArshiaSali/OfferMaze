@@ -24,10 +24,14 @@ An Android  App which allows the following features.
   - Products Fragment 
   - Orders Fragment
 - Fragments use Recycler View to display the list.
-- Upload New/Used Products with product details.  Update/Edit User profile.
-- Add products uploaded by other users to cart.  Update Quantities of products in Cart.
-- Add multiple delivery addresses(Home/Office) - Swipe to delete Functionality
-- Payment API Integration (Razorpay Payment)  List of placed orders.
+- Upload New/Used Products with product details.
+- Update/Edit User profile.
+- Add products uploaded by other users to cart. 
+- Update Quantities of products in Cart.
+- Add multiple delivery addresses(Home/Office) 
+  - Swipe to delete Functionality
+- Payment API Integration (Razorpay Payment)
+- List of placed orders.
 
 ## Architecture
 
