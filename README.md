@@ -1,5 +1,5 @@
 # OfferMaze 
-## Android App
+## Android App developed for CMPE-277 Final Project
 
 ## App Logo
 ![image](https://user-images.githubusercontent.com/37695314/119236037-17d6d180-baea-11eb-979b-e4400e2f450d.png)
